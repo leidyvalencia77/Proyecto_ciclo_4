@@ -11,5 +11,5 @@ Mi GiTHUB es: MarlonZunigaRueda
 Mi correo de contacto es :leidy.valencia77@gmail.com
 Mi GiTHUB es: leidyvalencia77
 
-3) Soy Vicky Poveda, Ingeniera Biomédica, vivo en Bogotá y quiero aprender programación porque  el mundo tecnológico se encuentra en un constante desarrollo y quiero estar siempre actualizada.
+3) Soy Vicky Poveda, Ingeniera Biomédica, vivo en Bogotá y quiero aprender programación porque  el mundo tecnológico se encuentra en constante desarrollo y quiero estar siempre actualizada.
 Mi cuenta de GitHub es: vpoveda
