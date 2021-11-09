@@ -10,3 +10,6 @@ Mi GiTHUB es: MarlonZunigaRueda
 2) Soy Leydy Viviana Valencia Hidalgo, trabajo para el ejercito nacional soy  estudiante de Misión TIC 2022. Quiero llegar a crecer profesionalmente por medio del mundo de software.
 Mi correo de contacto es :leidy.valencia77@gmail.com
 Mi GiTHUB es: leidyvalencia77
+
+3) Soy Vicky Poveda, Ingeniera Biomédica, vivo en Bogotá y quiero aprender programación porque  el mundo tecnológico se encuentra en constante desarrollo y quiero estar siempre actualizada.
+Mi cuenta de GitHub es: vpoveda
