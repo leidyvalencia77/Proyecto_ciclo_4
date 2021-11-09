@@ -7,3 +7,6 @@ Presentación Integrantes
 Mi correo de contacto es : marlon1987123@gmail.com
 Mi GiTHUB es: MarlonZunigaRueda
 
+2) Soy Leydy Viviana Valencia Hidalgo, trabajo para el ejercito nacional soy  estudiante de Misión TIC 2022. Quiero llegar a crecer profesionalmente por medio del mundo de software.
+Mi correo de contacto es :leidy.valencia77@gmail.com
+Mi GiTHUB es: leidyvalencia77
