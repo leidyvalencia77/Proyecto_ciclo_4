@@ -29,6 +29,48 @@ mongoose
     });
 
 function populateBD() {
-
+    var bcrypt = require("bcryptjs");
+    var User = database.user;
+    User.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+            const data = [{
+                fullname: "Leydy Viviana Valencia Hidalgo",
+                email: "leidy.valencia77@gmail.com",
+                password: bcrypt.hashSync("123456-", 8),
+                actived: true,
+                role: 'LÍDER',
+                address: "Carrera 6 # 34-67",
+                phone: "3113808204"
+            }, {
+                fullname: "Andres Perez Correa",
+                email: "correa12@gmail.com",
+                password: bcrypt.hashSync("123456-", 8),
+                actived: false,
+                role: 'ESTUDIANTE',
+                address: "Calle 45 # 34-67",
+                phone: "3203808204"
+            }, {
+                fullname: "Juan Jose Pineda Franco",
+                email: "jj.2007@gmail.com",
+                password: bcrypt.hashSync("123456-", 8),
+                actived: false,
+                role: 'ESTUDIANTE',
+                address: "Calle 9 # 3-7",
+                phone: "3223808204"
+            }, {
+                fullname: "Carlos Olaya Pulgarin",
+                email: "carlo.pulgarin23@gmail.com",
+                password: bcrypt.hashSync("123456-", 8),
+                actived: false,
+                role: 'ADMINISTRADOR',
+                address: "Av, Carrera 71 # 32-7",
+                phone: "3013808204"
+            }]
+            User.collection.insertMany(data, function (err, res) {
+                if (err) throw err;
+                console.log("Datos insertados");
+            });
+        }
+    });
 }
 module.exports = database;
