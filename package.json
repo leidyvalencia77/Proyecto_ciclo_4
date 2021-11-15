@@ -1,0 +1,30 @@
+{
+  "name": "proyecto_ciclo_4",
+  "version": "1.0.0",
+  "description": "Proyecto de software para  el ciclo 4. Gestión de Proyectos de Investigación",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leidyvalencia77/Proyecto_ciclo_4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leidyvalencia77/Proyecto_ciclo_4/issues"
+  },
+  "homepage": "https://github.com/leidyvalencia77/Proyecto_ciclo_4#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
