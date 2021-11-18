@@ -4,6 +4,10 @@ module.exports = mongoose => {
       type: String,
       required: true
     },
+    generalObjective: {
+      type: String,
+      required: true
+    },
     specificObjectives: [{
       title: {
         type: String,

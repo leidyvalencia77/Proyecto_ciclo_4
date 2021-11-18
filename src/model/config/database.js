@@ -68,7 +68,54 @@ function populateBD() {
             }]
             User.collection.insertMany(data, function (err, res) {
                 if (err) throw err;
-                console.log("Datos insertados");
+                console.log("Datos insertados en colección User");
+            });
+        }
+    });
+
+    var Project = database.project;
+    var ObjectId = require('mongodb').ObjectID;
+
+    Project.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+            const data = [{
+                title: "Investigación de Sistemas operativos",
+                specificObjectives: [{title:"Definir el porcentaje de uso de los S.O. en Colombia", accomplished:false},
+                                     {title:"Establecer los beneficios de cada S.O utilizado Colombia", accomplished:true}],
+                accomplishedExecution: true,
+                stage: 'EN PROGRESO',
+                startDate: new Date(),
+                finishDate: new Date(),
+                budget: 900000000,
+                detailsBudget: [{reason:"Encuestas a las 5 empresas mas exitosas de cada ciudad primario, secundaria y terciaria", amount:100000000},
+                                {reason:"Viaticos para 5 equipos que visitaran a las 5 empresas mas exitosas de cada ciudad primario, secundaria y terciaria", amount:200000000},
+                                {reason:"Adquisición de software para realizar modelos estadisticos", amount:600000000}],
+                leaderInChange: {_id:ObjectId("61946e15fa837423e36f0fcc")},
+                studentMembers: [{_id:ObjectId("61946e15fa837423e36f0fcd")},
+                                 {_id:ObjectId("6192e0bb7cbea30842c107c8")}],
+                status: 'SIN ASIGNAR',
+            },
+            {
+                title: "Investigación de Sistemas operativos 2",
+                specificObjectives: [{title:"Definir el porcentaje de uso de los S.O. en Colombia", accomplished:false},
+                                     {title:"Establecer los beneficios de cada S.O utilizado Colombia", accomplished:true}],
+                accomplishedExecution: true,
+                stage: 'EN PROGRESO',
+                startDate: new Date(),
+                finishDate: new Date(),
+                budget: 900000000,
+                detailsBudget: [{reason:"Encuestas a las 5 empresas mas exitosas de cada ciudad primario, secundaria y terciaria", amount:100000000},
+                                {reason:"Viaticos para 5 equipos que visitaran a las 5 empresas mas exitosas de cada ciudad primario, secundaria y terciaria", amount:200000000},
+                                {reason:"Adquisición de software para realizar modelos estadisticos", amount:600000000}],
+                leaderInChange: {_id:ObjectId("61946e15fa837423e36f0fcc")},
+                studentMembers: [{_id:ObjectId("61946e15fa837423e36f0fcd")},
+                                 {_id:ObjectId("6192e0bb7cbea30842c107c8")}],
+                status: 'SIN ASIGNAR',
+            }]
+
+            Project.collection.insertMany(data, function (err, res) {
+                if (err) throw err;
+                console.log("Datos insertados en colección Project");
             });
         }
     });
