@@ -24,7 +24,7 @@ module.exports = mongoose => {
     },
     stage: {
       type: String,
-      enum: ['PENDIENTE', 'APROBADO', 'EN PROGRESO', 'CANCELADO', 'SUSPENDIDO', 'EN REVISIÓN', 'COMPLETADO'],
+      enum: ['pendingApproval', 'approved', 'inProgress', 'cancelled', 'suspended', 'inReview', 'completed'],
       required: true
     },
     startDate: {
@@ -50,33 +50,45 @@ module.exports = mongoose => {
       }
     }],
     leaderInChange: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+      userId: {
+        type: String,
+        required: true
+      },
+      fullname: {
+        type: String,
+        required: true
+      }
     },
     studentMembers: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+      userId: {
+        type: String,
+        required: true
+      },
+      fullname: {
+        type: String,
+        required: true
+      }
     }],
-    tasks: [{
-      relatedSpecificObjective: {
+    registeredStudent: [{
+      userId: {
         type: String,
         required: true
       },
-      assignedStudentId: {
+      fullname: {
         type: String,
         required: true
       },
-      assignedStudentName: {
-        type: String,
-        required: true
-      },
-      accomplished: {
+      accepted: {
         type: Boolean,
         required: true
+      }
+    }],
+    progress: [{
+      descriptionId: {
+        type: String,
+        required: true
       },
-      title: {
+      student: {
         type: String,
         required: true
       },
@@ -84,23 +96,8 @@ module.exports = mongoose => {
         type: String,
         required: true
       },
-      progress: [{
-        commentDate: {
-          type: Date,
-          required: true
-        },
-        comment: {
-          type: String,
-          required: true
-        },
-        observation: {
-          type: String,
-          required: false
-        }
-      }],
-      status: {
+      observation: {
         type: String,
-        enum: ['SIN ASIGNAR', 'ASIGNADA', 'EN PROGRESO', 'EN REVISIÓN', 'COMPLETADA'],
         required: true
       }
     }],
