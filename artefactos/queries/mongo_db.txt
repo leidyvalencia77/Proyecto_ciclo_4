@@ -43,6 +43,7 @@ db.projects.find()
 
 ### Historia de usuario: HU_007
 
+db.projects.updateOne({_id:ObjectId("61984b9967b58123c2fcf202")},{$set:{approvedExecution:true,stage:"approved"}})
 
 ### Historia de usuario: HU_008
 
@@ -119,7 +120,7 @@ db.projects.find({"leaderInChange._id": ObjectId('61946e15fa837423e36f0fcc')})
 
 ### Historia de usuario: HU_014
 
-db.projects.find({'leaderInChange.userId': '6192e0bb7cbea30842c107c6'})
+db.projects.updateOne({_id:ObjectId("61984b9967b58123c2fcf201")},{$set:{title:"Nuevo titulo del proyecto"}})
 
 ### Historia de usuario: HU_015
 
@@ -134,7 +135,7 @@ db.projects.updateOne({_id:ObjectId("61984b9967b58123c2fcf201")},
 
 ### Historia de usuario: HU_017
 
-
+db.projects.find({"leaderInChange.userId":ObjectId("6192e0bb7cbea30842c107c6"),"_id":ObjectId("61984b9967b58123c2fcf201")})
 
 ### Historia de usuario: HU_018
 
