@@ -2,24 +2,30 @@ module.exports = mongoose => {
   var schema = mongoose.Schema({
     fullname: {
       type: String,
-      required: true
+      required: true,
+      trim: false
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      trim: true,
+      unique: true
     },
     password: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     actived: {
       type: Boolean,
-      required: true
+      required: true,
+      default: false
     },
     role: {
       type: String,
       enum: ['ESTUDIANTE', 'LÍDER', 'ADMINISTRADOR'],
-      required: true
+      required: true,
+      trim: true
     },
     address: {
       type: String,
@@ -27,7 +33,8 @@ module.exports = mongoose => {
     },
     phone: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     socialMedia: [{
       red: {
@@ -58,7 +65,8 @@ module.exports = mongoose => {
       },
       link: {
         type: String,
-        required: true
+        required: true,
+        trim: true
       }
     }],
   }, {

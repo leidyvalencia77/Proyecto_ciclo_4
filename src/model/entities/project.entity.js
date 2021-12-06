@@ -4,40 +4,48 @@ module.exports = mongoose => {
       type: String,
       required: true
     },
-    generalObjective: {
+    objectives: [{
+      id: {
       type: String,
-      required: true
-    },
-    specificObjectives: [{
+      required: true,
+      default: new mongoose.Schema.ObjectId()
+      },
       title: {
         type: String,
         required: true
       },
+      isMain: {
+        type: Boolean,
+        required: true,
+        default: false
+      },
       accomplished: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
       }
     }],
-    accomplishedExecution: {
-      type: Boolean,
-      required: true
-    },
     stage: {
       type: String,
       enum: ['pendingApproval', 'approved', 'inProgress', 'cancelled', 'suspended', 'inReview', 'completed'],
-      required: true
+      required: true,
+      trim: true,
+      default: 'pendingApproval'
     },
     startDate: {
       type: Date,
-      required: true
+      required: true,
+      default: new Date()
     },
     finishDate: {
       type: Date,
-      required: false
+      required: true
     },
     budget: {
       type: Number,
-      required: true
+      required: true,
+      trim: true,
+      default: 0
     },
     detailsBudget: [{
       reason: {
@@ -46,51 +54,35 @@ module.exports = mongoose => {
       },
       amount: {
         type: Number,
-        required: true
+        required: true,
+        trim: true,
+        default: 0
       }
     }],
     leaderInChange: {
-      userId: {
-        type: String,
-        required: true
-      },
-      fullname: {
-        type: String,
-        required: true
-      }
+      type: mongoose.ObjectId,
+      ref: 'User'
     },
     studentMembers: [{
-      userId: {
-        type: String,
-        required: true
-      },
-      fullname: {
-        type: String,
-        required: true
-      }
-    }],
-    registeredStudent: [{
-      userId: {
-        type: String,
-        required: true
-      },
-      fullname: {
-        type: String,
-        required: true
+      student: {
+        type: mongoose.ObjectId,
+        ref: 'User'
       },
       accepted: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
       }
     }],
     progress: [{
-      descriptionId: {
+      id: {
         type: String,
-        required: true
+        required: true,
+        default: new mongoose.Schema.ObjectId()
       },
       student: {
-        type: String,
-        required: true
+        type: mongoose.ObjectId,
+        ref: 'User'
       },
       description: {
         type: String,
