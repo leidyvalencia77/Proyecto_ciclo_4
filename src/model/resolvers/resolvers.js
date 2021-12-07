@@ -53,6 +53,14 @@ const resolvers = {
                 throw new Error("El proyecto no existe");
             }
             return result;
+        },
+        myProjects: async (_, {}, ctx) => {
+            //Validar si el proyecto existe
+            const result = await Project.find({leaderInChange:ctx.user.id});
+            if (!result) {
+                throw new Error("No tiene proyectos");
+            }
+            return result;
         }
     },
 

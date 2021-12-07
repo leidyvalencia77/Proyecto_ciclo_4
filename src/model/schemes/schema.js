@@ -118,6 +118,7 @@ const typeDefs = gql `
         # Proyectos
         getProjects: [Project]
         getProject(id:ID!): Project
+        myProjects: [Project]
     }
 `;
 
