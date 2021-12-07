@@ -1,8 +1,7 @@
-const {gql} = require('apollo-server');
+const { gql } = require('apollo-server');
 
 //Schema
-const typeDefs = gql `
-
+const typeDefs = gql`
     type User {
         id: ID
         fullname: String
@@ -18,25 +17,25 @@ const typeDefs = gql `
     }
 
     type DetailsBudget {
-        reason: String,
+        reason: String
         amount: Int
     }
 
     type StudentMember {
-        student: ID,
+        student: ID
         accepted: Boolean
     }
 
     type Progress {
-        id: ID,
-        description: String,
-        student: ID,
+        id: ID
+        description: String
+        student: ID
         observation: String
     }
 
     type Objective {
-        id: ID,
-        title: String,
+        id: ID
+        title: String
         accomplished: Boolean
     }
 
@@ -46,16 +45,16 @@ const typeDefs = gql `
         generalObjective: Objective
         specificObjectives: [Objective]
         stage: String
-        startDate: String,
-        finishDate: String,
-        budget: Float,
-        detailsBudget: [DetailsBudget],
-        leaderInChange: ID,
-        studentMembers: [StudentMember],
+        startDate: String
+        finishDate: String
+        budget: Float
+        detailsBudget: [DetailsBudget]
+        leaderInChange: ID
+        studentMembers: [StudentMember]
         progress: [Progress]
     }
 
-    input UserInput{
+    input UserInput {
         fullname: String!
         email: String!
         password: String!
@@ -64,17 +63,17 @@ const typeDefs = gql `
         phone: String!
     }
 
-    input UpdateUserInput{
+    input UpdateUserInput {
         fullname: String
         address: String
         phone: String
     }
 
-    input ActivateUserInput{
+    input ActivateUserInput {
         actived: Boolean!
     }
 
-    input AuthenticateInput{
+    input AuthenticateInput {
         email: String!
         password: String!
     }
@@ -83,7 +82,7 @@ const typeDefs = gql `
         title: String!
     }
 
-    input ProjectInput{
+    input ProjectInput {
         title: String!
         generalObjective: ObjectiveInput!
         specificObjectives: [ObjectiveInput]!
@@ -92,32 +91,40 @@ const typeDefs = gql `
         budget: Float!
     }
 
-    input RegisterProgressInput{
+    input RegisterProgressInput {
         description: String!
         observation: String!
-        student:ID
+        student: ID
     }
 
-    type Mutation{
+    input DataToUpdateProject {
+        title: String
+        budget: Float
+        generalObjective: String
+    }
+
+    type Mutation {
         # Usuarios
-        registerUser(input:UserInput): User
-        authenticateUser(input:AuthenticateInput): Token
-        updateUser(id:ID!, input:UpdateUserInput): User
-        activateUser(id:ID!, input:ActivateUserInput): User
+        registerUser(input: UserInput): User
+        authenticateUser(input: AuthenticateInput): Token
+        updateUser(id: ID!, input: UpdateUserInput): User
+        activateUser(id: ID!, input: ActivateUserInput): User
 
         # Proyectos
-        registerProject(input:ProjectInput): Project
-        registerProgressInProject(id:ID!, input:RegisterProgressInput): Project
+        registerProject(input: ProjectInput): Project
+        registerProgressInProject(id: ID!, input: RegisterProgressInput): Project
+        updateDataOfProject(projectId: ID!, input: DataToUpdateProject): Project
     }
 
-    type Query{
+    type Query {
         # Usuarios
         getUsers: [User]
-        getUser(id:ID!): User
+        getUser(id: ID!): User
 
         # Proyectos
         getProjects: [Project]
-        getProject(id:ID!): Project
+        getProject(id: ID!): Project
+        getProjectsByLeader(leaderId: ID!): [Project]
     }
 `;
 
