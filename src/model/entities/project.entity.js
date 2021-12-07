@@ -4,20 +4,33 @@ module.exports = mongoose => {
       type: String,
       required: true
     },
-    objectives: [{
-      id: {
-      type: String,
-      required: true,
-      default: new mongoose.Schema.ObjectId()
+    generalObjective: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
+        required: true,
+        auto: true,
       },
       title: {
         type: String,
         required: true
       },
-      isMain: {
+      accomplished: {
         type: Boolean,
         required: true,
         default: false
+      }
+    },
+    specificObjectives: [{
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
+        required: true,
+        auto: true,
+      },
+      title: {
+        type: String,
+        required: true
       },
       accomplished: {
         type: Boolean,
@@ -33,13 +46,14 @@ module.exports = mongoose => {
       default: 'pendingApproval'
     },
     startDate: {
-      type: Date,
+      type: String,
       required: true,
-      default: new Date()
+      trim: true
     },
     finishDate: {
-      type: Date,
-      required: true
+      type: String,
+      required: true,
+      trim: true
     },
     budget: {
       type: Number,
@@ -60,28 +74,30 @@ module.exports = mongoose => {
       }
     }],
     leaderInChange: {
-      type: mongoose.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: 'User'
     },
     studentMembers: [{
       student: {
-        type: mongoose.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
       },
       accepted: {
         type: Boolean,
-        required: true,
         default: false
       }
     }],
     progress: [{
-      id: {
-        type: String,
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
         required: true,
-        default: new mongoose.Schema.ObjectId()
+        auto: true,
       },
       student: {
-        type: mongoose.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
         ref: 'User'
       },
       description: {
@@ -103,7 +119,7 @@ module.exports = mongoose => {
       _id,
       ...object
     } = this.toObject();
-    object.id = _id;
+    object.id = _id.toHexString();
     return object;
   });
 

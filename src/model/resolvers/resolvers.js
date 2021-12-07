@@ -26,40 +26,33 @@ const createToken = (user) => {
     })
 }
 
-const verifyToken = (token) => {
-    return jwt.verify(token, process.env.SECRET_JWT);
-}
-
 const resolvers = {
 
     Query: {
         // Operaciones de la entidad User
-        getUsers: async (_, {token}, ctx) => {
-            const userId = await verifyToken(token);
-            if (!userId) {
-                throw new Error("El token no es correcto");
-            }
-            return User.find({});
+        getUsers: async () => {
+            const result = await User.find({});
+            return result;
         },
-        getUser: async (_, {token}) => {
-            const userId = await verifyToken(token);
-            return userId;
-        },// Operaciones de la entidad Project
-        getProjects: async (_, {token}) => {
-            const userId = await verifyToken(token);
-            if (!userId) {
-                throw new Error("El token no es correcto");
+        getUser: async (_, {id}) => {
+            //Validar si el proyecto existe
+            const result = await User.findById({_id:id});
+            if (!result) {
+                throw new Error("El usuario no existe");
             }
-            return Project.find({});
+            return result;
+        },// Operaciones de la entidad Project
+        getProjects: async () => {
+            const result = await Project.find({});
+            return result;
         },
         getProject: async (_, {id}) => {
             //Validar si el proyecto existe
-            const isProject = await Project.findOne({id});
-            if (!isProject) {
+            const result = await Project.findById({_id:id}).populate('progress');
+            if (!result) {
                 throw new Error("El proyecto no existe");
             }
-
-            return isProject;
+            return result;
         }
     },
 
@@ -112,7 +105,7 @@ const resolvers = {
         updateUser:  async (_, {id, input}) => {
 
             //Validar si el usuario esta registrado
-            let isUser = await User.findOne({id});
+            let isUser = await User.findById({_id:id});
             if (!isUser) {
                 throw new Error("El usuario no está registrado");
             }
@@ -126,7 +119,7 @@ const resolvers = {
         activateUser:  async (_, {id, input}) => {
 
             //Validar si el usuario esta registrado
-            let isUser = await User.findOne({id});
+            let isUser = await User.findById({_id:id});
             if (!isUser) {
                 throw new Error("El usuario no está registrado");
             }
@@ -137,16 +130,40 @@ const resolvers = {
             return isUser;
 
         },
-        registerProject: async(_, {input}) => {
+        registerProject: async(_, {input}, ctx) => {
+
+            if (ctx.user.role != process.env.ROLE_LEADER) {
+                throw new Error("El usuario no es Líder");
+            }
 
             // Registrar proyecto
+            const record = new Project(input);
+            //Asignar lider de proyecto
+            record.leaderInChange = ctx.user.id;
             try {
-                const record = new Project(input);
-                record.save();
-                return record;
+                const result = await record.save();
+                return result;
             } catch (err) {
                 console.log("¡No se logró registrar el proyecto!", err);
             }
+        },
+        registerProgressInProject:  async (_, {id, input}, ctx) => {
+
+            if (ctx.user.role != process.env.ROLE_STUDENT) {
+                throw new Error("El usuario no es Estudiante");
+            }
+
+            //Validar si el proyecto esta registrado
+            let result = await Project.findById({_id:id});
+            if (!result) {
+                throw new Error("El proyecto no está registrado");
+            }
+            input.student=ctx.user.id
+            //Actualizar datos
+            result = await Project.findOneAndUpdate({_id:id}, { $push: { progress: input } }, {new: true}).populate('progress');
+
+            return result;
+
         }
     },
 }

@@ -23,35 +23,34 @@ const typeDefs = gql `
     }
 
     type StudentMember {
-        student: User,
+        student: ID,
         accepted: Boolean
     }
 
     type Progress {
         id: ID,
         description: String,
-        student: User,
+        student: ID,
         observation: String
     }
 
     type Objective {
         id: ID,
         title: String,
-        isMain: Boolean,
         accomplished: Boolean
     }
 
     type Project {
-        # The user's password.
         id: ID
         title: String
-        objectives: [Objective]
+        generalObjective: Objective
+        specificObjectives: [Objective]
         stage: String
         startDate: String,
         finishDate: String,
         budget: Float,
         detailsBudget: [DetailsBudget],
-        leaderInChange: User,
+        leaderInChange: ID,
         studentMembers: [StudentMember],
         progress: [Progress]
     }
@@ -80,12 +79,23 @@ const typeDefs = gql `
         password: String!
     }
 
+    input ObjectiveInput {
+        title: String!
+    }
+
     input ProjectInput{
         title: String!
+        generalObjective: ObjectiveInput!
+        specificObjectives: [ObjectiveInput]!
         startDate: String!
         finishDate: String!
         budget: Float!
-        leaderInChange:String!
+    }
+
+    input RegisterProgressInput{
+        description: String!
+        observation: String!
+        student:ID
     }
 
     type Mutation{
@@ -97,17 +107,17 @@ const typeDefs = gql `
 
         # Proyectos
         registerProject(input:ProjectInput): Project
+        registerProgressInProject(id:ID!, input:RegisterProgressInput): Project
     }
 
     type Query{
         # Usuarios
-        getUsers(token:String!): [User]
-        getUser(token:String!): User
+        getUsers: [User]
+        getUser(id:ID!): User
 
         # Proyectos
-        getProjects(token:String!): [Project]
+        getProjects: [Project]
         getProject(id:ID!): Project
-
     }
 `;
 
