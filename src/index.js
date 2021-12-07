@@ -1,5 +1,7 @@
-const express = require('express');
 const {ApolloServer} = require('apollo-server');
+require('dotenv').config({path:'variables.env'});
+const express = require('express');
+const jwt = require("jsonwebtoken");
 const morgan = require('morgan');
 const path = require('path');
 
@@ -16,6 +18,22 @@ database.conectarBD();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: ({req})=>{
+
+        const tkn = req.headers['authorization'] || '';
+
+        if (tkn) {
+            try {
+                const user = jwt.verify(tkn, process.env.SECRET_JWT);
+
+                return{
+                    user
+                }
+            } catch (err) {
+                console.log("¡Ha ocurrido un error!", err);
+            }
+        }
+    }
 });
 
 
