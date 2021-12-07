@@ -56,6 +56,14 @@ const resolvers = {
             const result = await Project.find({ leaderInChange: leaderId });
             return result;
         },
+        myProjects: async (_, {}, ctx) => {
+            //Validar si el proyecto existe
+            const result = await Project.find({ leaderInChange: ctx.user.id });
+            if (!result) {
+                throw new Error('No tiene proyectos');
+            }
+            return result;
+        },
     },
 
     Mutation: {

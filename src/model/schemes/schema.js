@@ -125,6 +125,8 @@ const typeDefs = gql`
         getProjects: [Project]
         getProject(id: ID!): Project
         getProjectsByLeader(leaderId: ID!): [Project]
+        getProject(id: ID!): Project
+        myProjects: [Project]
     }
 `;
 
