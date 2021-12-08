@@ -2,12 +2,17 @@ const { gql } = require('apollo-server');
 
 //Schema
 const typeDefs = gql`
+    # --- --- --- ---
+    # --- TYPES ---
+    # --- --- --- ---
+
     type User {
-        id: ID
-        fullname: String
-        email: String
-        actived: Boolean
-        role: String
+        id: ID!
+        documentId: String!
+        email: String!
+        fullName: String!
+        role: String!
+        status: String
         address: String
         phone: String
     }
@@ -16,21 +21,32 @@ const typeDefs = gql`
         token: String
     }
 
-    type DetailsBudget {
-        reason: String
-        amount: Int
+    type StudentMember {
+        id: ID!
+        fullName: String!
+        inscriptionStatus: String
+        dateOfAdmission: String
+        egressDate: String
     }
 
-    type StudentMember {
-        student: ID
-        accepted: Boolean
+    type StudentsByProject {
+        projectId: ID!
+        students: [StudentMember]!
     }
 
     type Progress {
-        id: ID
-        description: String
-        student: ID
+        id: ID!
+        studentId: ID!
+        studentFullName: String!
+        createdDate: String!
+        description: String!
         observation: String
+    }
+
+    type LeaderInCharge {
+        id: ID!
+        fullName: String!
+        documentId: String!
     }
 
     type Objective {
@@ -40,37 +56,45 @@ const typeDefs = gql`
     }
 
     type Project {
-        id: ID
-        title: String
-        generalObjective: Objective
-        specificObjectives: [Objective]
-        stage: String
+        id: ID!
+        title: String!
+        generalObjective: String!
+        specificObjectives: [Objective]!
+        budget: Number!
         startDate: String
         finishDate: String
-        budget: Float
-        detailsBudget: [DetailsBudget]
-        leaderInChange: ID
-        studentMembers: [StudentMember]
-        progress: [Progress]
+        leaderInCharge: LeaderInCharge!
+        status: String
+        stage: String
+        studentsInProject: [StudentMember]!
+        progress: [Progress]!
     }
 
+    # --- --- --- ---
+    # --- INPUTS ---
+    # --- --- --- ---
+
     input UserInput {
+        documentId: String!
         fullname: String!
         email: String!
         password: String!
         role: String!
+        status: String!
         address: String!
         phone: String!
     }
 
     input UpdateUserInput {
         fullname: String
+        email: String
+        password: String
         address: String
         phone: String
     }
 
-    input ActivateUserInput {
-        actived: Boolean!
+    input UpdateStatusUserInput {
+        status: String!
     }
 
     input AuthenticateInput {
@@ -82,39 +106,86 @@ const typeDefs = gql`
         title: String!
     }
 
+    input LeaderInChargeInput {
+        id: ID!
+        fullName: String!
+        documentId: String!
+    }
+
     input ProjectInput {
         title: String!
-        generalObjective: ObjectiveInput!
+        generalObjective: String
         specificObjectives: [ObjectiveInput]!
+        budget: Number!
         startDate: String!
         finishDate: String!
-        budget: Float!
+        leaderInCharge: LeaderInChargeInput!
+        studentsInProject: [StudentMember]!
+        progress: [Progress]!
     }
 
-    input RegisterProgressInput {
+    input StudentMemberInput {
+        id: ID!
+        fullName: String!
+        inscriptionStatus: String
+        dateOfAdmission: String
+        egressDate: String
+    }
+
+    input ProgressInput {
+        studentId: ID!
+        studentFullName: String!
         description: String!
-        observation: String!
-        student: ID
     }
 
-    input DataToUpdateProject {
+    input UpdateProgressDescription {
+        description: string!
+    }
+
+    input UpdateProgressObservation {
+        observation: string!
+    }
+
+    input UpdateProjectDataInput {
         title: String
-        budget: Float
+        budget: Number
         generalObjective: String
     }
 
-    type Mutation {
-        # Usuarios
-        registerUser(input: UserInput): User
-        authenticateUser(input: AuthenticateInput): Token
-        updateUser(id: ID!, input: UpdateUserInput): User
-        activateUser(id: ID!, input: ActivateUserInput): User
-
-        # Proyectos
-        registerProject(input: ProjectInput): Project
-        registerProgressInProject(id: ID!, input: RegisterProgressInput): Project
-        updateDataOfProject(projectId: ID!, input: DataToUpdateProject): Project
+    input UpdateSpecificObjectiveInput {
+        _id: ID!
+        title: String
+        accomplished: Boolean
     }
+
+    # --- START - PARA REVISAR ---
+    input ActivateUserInput {
+        actived: Boolean!
+    }
+    # --- FIN - PARA REVISAR ---
+
+    # --- --- --- ---
+    # --- MUTATIONS ---
+    # --- --- --- ---
+
+    type Mutation {
+        # --- Usuarios ---
+        authenticateUser(input: AuthenticateInput): Token
+        registerUser(input: UserInput): User
+        updateUser(id: ID!, input: UpdateUserInput): User
+        activateUser(id: ID!, input: UpdateStatusUserInput): User
+
+        # --- Proyectos ---
+        registerProject(input: ProjectInput): Project
+        registerProgressInProject(id: ID!, input: ProgressInput): Project
+        updateProjectData(projectId: ID!, input: UpdateProjectDataInput): Project
+        updateSpecificObjective(projectId: ID!, objectiveId: ID!, input: UpdateSpecificObjectiveInput): Project
+        updateInscriptionStatus(projectId: ID!, studentId: ID!, inscriptionStatus: String!): Project
+        updateProgressDescription(projectId: ID!, progressId: ID!, description: String): Project
+        updateProgressObservation(projectId: ID!, progressId: ID!, observation: String): Project
+    }
+
+    # --- QUERYS ---
 
     type Query {
         # Usuarios
@@ -125,7 +196,7 @@ const typeDefs = gql`
         getProjects: [Project]
         getProject(id: ID!): Project
         getProjectsByLeader(leaderId: ID!): [Project]
-        getProject(id: ID!): Project
+        listInscriptions(leaderId: ID!): StudentsByProject
         myProjects: [Project]
     }
 `;
