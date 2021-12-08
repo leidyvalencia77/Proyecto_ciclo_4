@@ -1,88 +1,62 @@
-module.exports = mongoose => {
-  var schema = mongoose.Schema({
-    fullname: {
-      type: String,
-      required: true,
-      trim: false
-    },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    actived: {
-      type: Boolean,
-      required: true,
-      default: false
-    },
-    role: {
-      type: String,
-      enum: ['ESTUDIANTE', 'LÍDER', 'ADMINISTRADOR'],
-      required: true,
-      trim: true
-    },
-    address: {
-      type: String,
-      required: true
-    },
-    phone: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    socialMedia: [{
-      red: {
-        type: String,
-        required: true
-      },
-      link: {
-        type: String,
-        required: true
-      }
-    }],
-    notifications: [{
-      date: {
-        type: Date,
-        required: true
-      },
-      read: {
-        type: Boolean,
-        required: true
-      },
-      title: {
-        type: String,
-        required: true
-      },
-      message: {
-        type: String,
-        required: true
-      },
-      link: {
-        type: String,
-        required: true,
-        trim: true
-      }
-    }],
-  }, {
-    timestamps: true
-  });
+module.exports = (mongoose) => {
+    var schema = mongoose.Schema(
+        {
+            documentId: {
+                type: String,
+                required: true,
+                trim: true,
+                unique: true,
+            },
+            email: {
+                type: String,
+                required: true,
+                trim: true,
+                unique: true,
+            },
+            fullname: {
+                type: String,
+                required: true,
+                trim: false,
+            },
+            password: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            role: {
+                type: String,
+                enum: ['ESTUDIANTE', 'LÍDER', 'ADMINISTRADOR'],
+                required: true,
+                trim: true,
+            },
+            status: {
+                type: String,
+                enum: ['PENDIENTE', 'AUTORIZADO', 'NO AUTORIZADO'],
+                required: true,
+                trim: true,
+                default: 'PENDIENTE',
+            },
+            address: {
+                type: String,
+                required: true,
+            },
+            phone: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+        },
+        {
+            timestamps: true,
+        },
+    );
 
-  schema.method("toJSON", function () {
-    const {
-      __v,
-      _id,
-      ...object
-    } = this.toObject();
-    object.id = _id;
-    return object;
-  });
+    schema.method('toJSON', function () {
+        const { __v, _id, ...object } = this.toObject();
+        object.id = _id;
+        return object;
+    });
 
-  const User = mongoose.model("user", schema);
-  return User;
+    const User = mongoose.model('user', schema);
+    return User;
 };
