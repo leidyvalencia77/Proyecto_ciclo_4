@@ -60,7 +60,7 @@ const typeDefs = gql`
         title: String!
         generalObjective: String!
         specificObjectives: [Objective]!
-        budget: Number!
+        budget: Number
         startDate: String
         finishDate: String
         leaderInCharge: LeaderInCharge!
