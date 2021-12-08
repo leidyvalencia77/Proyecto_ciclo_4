@@ -9,12 +9,12 @@ const User = require(path.join('../entities', 'user.entity'))(mongoose);
 const Project = require(path.join('../entities', 'project.entity'))(mongoose);
 
 const createToken = (user) => {
-    const { id, fullname, email, role } = user;
+    const { id, fullName, email, role } = user;
 
     return jwt.sign(
         {
             id,
-            fullname,
+            fullName,
             email,
             role,
         },
@@ -52,8 +52,8 @@ const resolvers = {
             }
             return result;
         },
-        getProjectsByLeader: async (root, { leaderId }) => {
-            const result = await Project.find({ leaderInChange: leaderId });
+        getProjectsByLeader: async (root, {}, ctx) => {
+            const result = await Project.find({ 'leaderInCharge.id': ctx.user.id });
             return result;
         },
         myProjects: async (_, {}, ctx) => {
@@ -170,7 +170,6 @@ const resolvers = {
 
             return result;
         },
-
         updateProjectData: async (root, { projectId, input }) => {
             const projectExist = await Project.find({ _id: projectId });
 

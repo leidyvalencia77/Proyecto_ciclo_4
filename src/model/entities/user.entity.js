@@ -13,7 +13,7 @@ module.exports = (mongoose) => {
                 trim: true,
                 unique: true,
             },
-            fullname: {
+            fullName: {
                 type: String,
                 required: true,
                 trim: false,

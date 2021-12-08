@@ -76,17 +76,17 @@ const typeDefs = gql`
 
     input UserInput {
         documentId: String!
-        fullname: String!
+        fullName: String!
         email: String!
         password: String!
         role: String!
         status: String!
-        address: String!
-        phone: String!
+        address: String
+        phone: String
     }
 
     input UpdateUserInput {
-        fullname: String
+        fullName: String
         email: String
         password: String
         address: String
@@ -177,6 +177,8 @@ const typeDefs = gql`
 
         # --- Proyectos ---
         registerProject(input: ProjectInput): Project
+
+        # --- PENDIENTES ---
         registerProgressInProject(id: ID!, input: ProgressInput): Project
         updateProjectData(projectId: ID!, input: UpdateProjectDataInput): Project
         updateSpecificObjective(projectId: ID!, objectiveId: ID!, input: UpdateSpecificObjectiveInput): Project
@@ -195,9 +197,12 @@ const typeDefs = gql`
         # Proyectos
         getProjects: [Project]
         getProject(id: ID!): Project
-        getProjectsByLeader(leaderId: ID!): [Project]
-        listInscriptions(leaderId: ID!): StudentsByProject
+        getProjectsByLeader: [Project]
         myProjects: [Project]
+
+        # --- PENDIENTES ---
+        getProjectByLeader(projectId: ID): Project
+        listInscriptions(leaderId: ID!): StudentsByProject
     }
 `;
 

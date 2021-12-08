@@ -37,14 +37,12 @@ module.exports = (mongoose) => {
             status: {
                 type: String,
                 enum: ['activo', 'inactivo'],
-                required: true,
                 trim: true,
                 default: 'inactivo',
             },
             stage: {
                 type: String,
-                enum: ['iniciado', 'en desarrollo', 'terminado'],
-                required: true,
+                enum: [null, 'iniciado', 'en desarrollo', 'terminado'],
                 trim: true,
                 default: null,
             },
@@ -59,7 +57,7 @@ module.exports = (mongoose) => {
                 trim: true,
             },
             leaderInCharge: {
-                _id: {
+                id: {
                     type: mongoose.Schema.Types.ObjectId,
                     required: true,
                     ref: 'Users',
@@ -73,7 +71,7 @@ module.exports = (mongoose) => {
                     required: true,
                 },
             },
-            studentMembers: [
+            studentsInProject: [
                 {
                     _id: {
                         type: mongoose.Schema.Types.ObjectId,
