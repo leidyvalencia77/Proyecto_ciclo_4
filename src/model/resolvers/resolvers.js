@@ -171,7 +171,7 @@ const resolvers = {
             return result;
         },
 
-        updateDataOfProject: async (root, { projectId, input }) => {
+        updateProjectData: async (root, { projectId, input }) => {
             const projectExist = await Project.find({ _id: projectId });
 
             if (!projectExist) {
