@@ -60,7 +60,7 @@ const typeDefs = gql`
         title: String!
         generalObjective: String!
         specificObjectives: [Objective]!
-        budget: Number
+        budget: Int
         startDate: String
         finishDate: String
         leaderInCharge: LeaderInCharge!
@@ -116,12 +116,12 @@ const typeDefs = gql`
         title: String!
         generalObjective: String
         specificObjectives: [ObjectiveInput]!
-        budget: Number!
+        budget: Int!
         startDate: String!
         finishDate: String!
         leaderInCharge: LeaderInChargeInput!
-        studentsInProject: [StudentMember]!
-        progress: [Progress]!
+        studentsInProject: [StudentMemberInput]!
+        progress: [ProgressInput]!
     }
 
     input StudentMemberInput {
@@ -139,16 +139,16 @@ const typeDefs = gql`
     }
 
     input UpdateProgressDescription {
-        description: string!
+        description: String!
     }
 
     input UpdateProgressObservation {
-        observation: string!
+        observation: String!
     }
 
     input UpdateProjectDataInput {
         title: String
-        budget: Number
+        budget: Int
         generalObjective: String
     }
 
