@@ -76,17 +76,17 @@ const typeDefs = gql`
 
     input UserInput {
         documentId: String!
-        fullname: String!
+        fullName: String!
         email: String!
         password: String!
         role: String!
-        status: String!
+        status: String
         address: String!
         phone: String!
     }
 
     input UpdateUserInput {
-        fullname: String
+        fullName: String
         email: String
         password: String
         address: String
@@ -95,6 +95,10 @@ const typeDefs = gql`
 
     input UpdateStatusUserInput {
         status: String!
+    }
+
+    input ChangeUserPasswordInput{
+        password: String!
     }
 
     input AuthenticateInput {
@@ -174,6 +178,7 @@ const typeDefs = gql`
         registerUser(input: UserInput): User
         updateUser(id: ID!, input: UpdateUserInput): User
         activateUser(id: ID!, input: UpdateStatusUserInput): User
+        changeUserPassword(id: ID!, input: ChangeUserPasswordInput): Token
 
         # --- Proyectos ---
         registerProject(input: ProjectInput): Project
@@ -197,7 +202,6 @@ const typeDefs = gql`
         getProject(id: ID!): Project
         getProjectsByLeader(leaderId: ID!): [Project]
         listInscriptions(leaderId: ID!): StudentsByProject
-        myProjects: [Project]
     }
 `;
 
