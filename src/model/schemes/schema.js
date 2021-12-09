@@ -21,9 +21,9 @@ const typeDefs = gql`
         token: String
     }
 
-    type StudentMember {
-        id: ID!
-        fullName: String!
+    type StudentInProject {
+        studentId: ID
+        fullName: String
         inscriptionStatus: String
         dateOfAdmission: String
         egressDate: String
@@ -31,7 +31,7 @@ const typeDefs = gql`
 
     type StudentsByProject {
         projectId: ID!
-        students: [StudentMember]!
+        students: [StudentInProject]!
     }
 
     type Progress {
@@ -66,7 +66,7 @@ const typeDefs = gql`
         leaderInCharge: LeaderInCharge!
         status: String
         stage: String
-        studentsInProject: [StudentMember]!
+        studentsInProject: [StudentInProject]!
         progress: [Progress]!
     }
 
@@ -76,17 +76,17 @@ const typeDefs = gql`
 
     input UserInput {
         documentId: String!
-        fullname: String!
+        fullName: String!
         email: String!
         password: String!
         role: String!
         status: String!
-        address: String!
-        phone: String!
+        address: String
+        phone: String
     }
 
     input UpdateUserInput {
-        fullname: String
+        fullName: String
         email: String
         password: String
         address: String
@@ -177,12 +177,17 @@ const typeDefs = gql`
 
         # --- Proyectos ---
         registerProject(input: ProjectInput): Project
-        registerProgressInProject(id: ID!, input: ProgressInput): Project
         updateProjectData(projectId: ID!, input: UpdateProjectDataInput): Project
+        registerProgressInProject(projectId: ID!, description: String!): Project
+
+        # --- PENDIENTES PROBAR ---
+        updateProgressObservation(projectId: ID!, progressId: ID!, observation: String!): Project
+        updateProgressDescription(projectId: ID!, progressId: ID!, description: String!): Project
+
+        # --- PENDIENTES CREAR ---
         updateSpecificObjective(projectId: ID!, objectiveId: ID!, input: UpdateSpecificObjectiveInput): Project
         updateInscriptionStatus(projectId: ID!, studentId: ID!, inscriptionStatus: String!): Project
-        updateProgressDescription(projectId: ID!, progressId: ID!, description: String): Project
-        updateProgressObservation(projectId: ID!, progressId: ID!, observation: String): Project
+        registerInProject(projectId: ID!): Project
     }
 
     # --- QUERYS ---
@@ -195,9 +200,13 @@ const typeDefs = gql`
         # Proyectos
         getProjects: [Project]
         getProject(id: ID!): Project
-        getProjectsByLeader(leaderId: ID!): [Project]
-        listInscriptions(leaderId: ID!): StudentsByProject
+        getProjectsByLeader: [Project]
+        getProjectsActives: [Project]
         myProjects: [Project]
+
+        # --- PENDIENTES ---
+        getProjectByLeader(projectId: ID): Project
+        listInscriptions(leaderId: ID!): StudentsByProject
     }
 `;
 

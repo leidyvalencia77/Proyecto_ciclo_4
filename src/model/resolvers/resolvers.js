@@ -9,12 +9,12 @@ const User = require(path.join('../entities', 'user.entity'))(mongoose);
 const Project = require(path.join('../entities', 'project.entity'))(mongoose);
 
 const createToken = (user) => {
-    const { id, fullname, email, role } = user;
+    const { id, fullName, email, role } = user;
 
     return jwt.sign(
         {
             id,
-            fullname,
+            fullName,
             email,
             role,
         },
@@ -44,6 +44,10 @@ const resolvers = {
             const result = await Project.find({});
             return result;
         },
+        getProjectsActives: async () => {
+            const result = await Project.find({ status: 'activo' });
+            return result;
+        },
         getProject: async (_, { id }) => {
             //Validar si el proyecto existe
             const result = await Project.findById({ _id: id }).populate('progress');
@@ -52,8 +56,8 @@ const resolvers = {
             }
             return result;
         },
-        getProjectsByLeader: async (root, { leaderId }) => {
-            const result = await Project.find({ leaderInChange: leaderId });
+        getProjectsByLeader: async (root, {}, ctx) => {
+            const result = await Project.find({ 'leaderInCharge.id': ctx.user.id });
             return result;
         },
         myProjects: async (_, {}, ctx) => {
@@ -148,29 +152,23 @@ const resolvers = {
                 console.log('¡No se logró registrar el proyecto!', err);
             }
         },
-        registerProgressInProject: async (_, { id, input }, ctx) => {
-            console.log(ctx);
-
-            // if (ctx.user.role != process.env.ROLE_STUDENT) {
-            //     throw new Error('El usuario no es Estudiante');
-            // }
-
-            //Validar si el proyecto esta registrado
-            let result = await Project.findById({ _id: id });
-            if (!result) {
-                throw new Error('El proyecto no está registrado');
+        registerProgressInProject: async (_, { projectId, description }, ctx) => {
+            if (ctx.user.role != process.env.ROLE_STUDENT) {
+                throw new Error('El usuario no es Estudiante');
             }
-            // input.student = ctx.user.id;
-            //Actualizar datos
-            result = await Project.findOneAndUpdate(
-                { _id: id },
-                { $push: { progress: input } },
-                { new: true },
-            ).populate('progress');
 
+            const input = {};
+            input.studentId = ctx.user.id;
+            input.studentFullName = ctx.user.fullName;
+            input.description = description;
+
+            const result = await Project.findOneAndUpdate(
+                { _id: projectId },
+                { $push: { progress: input }, $set: { stage: 'en desarrollo' } },
+                { new: true },
+            );
             return result;
         },
-
         updateProjectData: async (root, { projectId, input }) => {
             const projectExist = await Project.find({ _id: projectId });
 
@@ -180,6 +178,43 @@ const resolvers = {
 
             const result = await Project.findOneAndUpdate({ _id: projectId }, { $set: input }, { new: true });
 
+            return result;
+        },
+        updateProgressDescription: async (root, { projectId, progressId, description }) => {
+            const result = Project.findOneAndUpdate(
+                { _id: projectId },
+                { $set: { 'progress.$[progress].description': description } },
+                { arrayFilters: [{ 'progress._id': progressId }], new: true },
+            );
+
+            return result;
+        },
+        updateProgressObservation: async (root, { projectId, progressId, observation }) => {
+            const result = Project.findOneAndUpdate(
+                { _id: projectId },
+                { $set: { 'progress.$[progress].observation': observation } },
+                { arrayFilters: [{ 'progress._id': progressId }], new: true },
+            );
+
+            return result;
+        },
+
+        registerInProject: async (root, { projectId }, ctx) => {
+            console.log({ ctx });
+            if (ctx.user.role != process.env.ROLE_STUDENT) {
+                throw new Error('El usuario no es Estudiante');
+            }
+
+            const input = {};
+            input.studentId = ctx.user.id;
+            input.fullName = ctx.user.fullName;
+
+            const result = await Project.findOneAndUpdate(
+                { _id: projectId, status: 'activo' },
+                { $push: { studentsInProject: input } },
+                { new: true },
+            );
+            console.log(JSON.stringify(result, null, 2));
             return result;
         },
     },

@@ -37,14 +37,12 @@ module.exports = (mongoose) => {
             status: {
                 type: String,
                 enum: ['activo', 'inactivo'],
-                required: true,
                 trim: true,
                 default: 'inactivo',
             },
             stage: {
                 type: String,
-                enum: ['iniciado', 'en desarrollo', 'terminado'],
-                required: true,
+                enum: [null, 'iniciado', 'en desarrollo', 'terminado'],
                 trim: true,
                 default: null,
             },
@@ -59,10 +57,10 @@ module.exports = (mongoose) => {
                 trim: true,
             },
             leaderInCharge: {
-                _id: {
+                id: {
                     type: mongoose.Schema.Types.ObjectId,
                     required: true,
-                    ref: 'Users',
+                    ref: 'User',
                 },
                 fullName: {
                     type: String,
@@ -73,12 +71,12 @@ module.exports = (mongoose) => {
                     required: true,
                 },
             },
-            studentMembers: [
+            studentsInProject: [
                 {
-                    _id: {
+                    studentId: {
                         type: mongoose.Schema.Types.ObjectId,
                         required: true,
-                        ref: 'Users',
+                        unique: true,
                     },
                     fullName: {
                         type: String,
@@ -86,7 +84,7 @@ module.exports = (mongoose) => {
                     },
                     inscriptionStatus: {
                         type: String,
-                        enum: ['aceptada', 'rechazada'],
+                        enum: [null, 'aceptada', 'rechazada'],
                         required: true,
                         trim: true,
                         default: null,
@@ -116,7 +114,7 @@ module.exports = (mongoose) => {
                         required: true,
                         ref: 'Users',
                     },
-                    fulstudentFullNamelName: {
+                    studentFullName: {
                         type: String,
                         required: true,
                     },
@@ -131,7 +129,6 @@ module.exports = (mongoose) => {
                     },
                     observation: {
                         type: String,
-                        default: null,
                     },
                 },
             ],
