@@ -60,7 +60,7 @@ module.exports = (mongoose) => {
                 id: {
                     type: mongoose.Schema.Types.ObjectId,
                     required: true,
-                    ref: 'Users',
+                    ref: 'User',
                 },
                 fullName: {
                     type: String,
@@ -73,10 +73,10 @@ module.exports = (mongoose) => {
             },
             studentsInProject: [
                 {
-                    _id: {
+                    studentId: {
                         type: mongoose.Schema.Types.ObjectId,
                         required: true,
-                        ref: 'Users',
+                        unique: true,
                     },
                     fullName: {
                         type: String,
@@ -84,7 +84,7 @@ module.exports = (mongoose) => {
                     },
                     inscriptionStatus: {
                         type: String,
-                        enum: ['aceptada', 'rechazada'],
+                        enum: [null, 'aceptada', 'rechazada'],
                         required: true,
                         trim: true,
                         default: null,
@@ -114,7 +114,7 @@ module.exports = (mongoose) => {
                         required: true,
                         ref: 'Users',
                     },
-                    fulstudentFullNamelName: {
+                    studentFullName: {
                         type: String,
                         required: true,
                     },
@@ -129,7 +129,6 @@ module.exports = (mongoose) => {
                     },
                     observation: {
                         type: String,
-                        default: null,
                     },
                 },
             ],
