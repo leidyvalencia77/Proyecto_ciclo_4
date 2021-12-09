@@ -52,16 +52,14 @@ const resolvers = {
             }
             return result;
         },
-        getProjectsByLeader: async (root, { leaderId }) => {
-            const result = await Project.find({ leaderInChange: leaderId });
-            return result;
-        },
-        myProjects: async (_, {}, ctx) => {
-            //Validar si el proyecto existe
-            const result = await Project.find({ leaderInChange: ctx.user.id });
-            if (!result) {
-                throw new Error('No tiene proyectos');
+        getProjectsByLeader: async (root, {leaderId}) => {
+
+            if (leaderId != process.env.ROLE_LEADER) {
+                throw new Error('El usuario no es un líder');
             }
+            const result = await Project.find({
+                leaderInChange: leaderId
+            });
             return result;
         },
     },
@@ -132,6 +130,27 @@ const resolvers = {
 
             return isUser;
         },
+        changeUserPassword: async (_, { id, input }) => {
+
+            const { password } = input;
+
+            //Validar si el usuario esta registrado
+            let isUser = await User.findById({ _id: id });
+            if (!isUser) {
+                throw new Error('El usuario no está registrado');
+            }
+
+            // Encriptar password
+            input.password = bcrypt.hashSync(password, 10);
+
+            //Actualizar password
+            isUser = await User.findOneAndUpdate({ _id: id }, input, { new: true });
+
+            //Crear token para el usuario
+            return {
+                token: createToken(isUser),
+            };
+        },
         registerProject: async (_, { input }, ctx) => {
             if (ctx.user.role != process.env.ROLE_LEADER) {
                 throw new Error('El usuario no es Líder');
@@ -149,18 +168,12 @@ const resolvers = {
             }
         },
         registerProgressInProject: async (_, { id, input }, ctx) => {
-            console.log(ctx);
-
-            // if (ctx.user.role != process.env.ROLE_STUDENT) {
-            //     throw new Error('El usuario no es Estudiante');
-            // }
-
             //Validar si el proyecto esta registrado
             let result = await Project.findById({ _id: id });
             if (!result) {
                 throw new Error('El proyecto no está registrado');
             }
-            // input.student = ctx.user.id;
+
             //Actualizar datos
             result = await Project.findOneAndUpdate(
                 { _id: id },
